@@ -2,6 +2,22 @@ import React, { Component } from "react";
 import "./App.css";
 
 class App extends Component {
+  state = {
+    color: "black",
+    bold: false,
+    italic: false,
+    underline: false
+  };
+
+  setStyle = style => {
+    const newStyle = !this.state[style];
+    this.setState({ [style]: newStyle });
+  };
+
+  chooseColor = color => {
+    this.setState({ color: color });
+  };
+
   render() {
     const styles = {
       bold: { fontWeight: "bold" },
@@ -14,7 +30,11 @@ class App extends Component {
 
     const stylingBoxes = styleNames.map(style => {
       return (
-        <button style={styles[style]} key={style}>
+        <button
+          style={styles[style]}
+          key={style}
+          onClick={() => this.setStyle(style)}
+        >
           {style}
         </button>
       );
@@ -25,6 +45,7 @@ class App extends Component {
         <button
           style={{ backgroundColor: color, height: 30, width: 30 }}
           key={color}
+          onClick={() => this.chooseColor(color)}
         />
       );
     });
@@ -32,7 +53,14 @@ class App extends Component {
     return (
       <div className="App">
         <div className="my-3">{stylingBoxes}</div>
-        <textarea />
+        <textarea
+          style={{
+            color: this.state.color,
+            fontWeight: this.state.bold ? "bold" : "",
+            fontStyle: this.state.italic ? "italic" : "",
+            textDecorationLine: this.state.underline ? "underline" : ""
+          }}
+        />
         <div className="my-3">{colorBoxes}</div>
       </div>
     );
