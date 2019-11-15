@@ -11,47 +11,30 @@ const styles = {
 class App extends Component {
   state = {
     style: {},
-    color: "black",
-    backgroundColor: null
+    color: "black"
   };
 
   changeColor = color => {
     this.setState({ color: color });
   };
 
-  changeStyle = style => {
-    // if (this.state.style["fontWeight"]) {
-    //   this.setState({
-    //     style: {
-    //       fontWeight: ""
-    //     },
-    //     backgroundColor: null
-    //   });
-    // } else if (this.state.style["fontStyle"]) {
-    //   this.setState({
-    //     style: {
-    //       fontStyle: ""
-    //     },
-    //     backgroundColor: null
-    //   });
-    // } else if (this.state.style["textDecorationLine"]) {
-    //   this.setState({
-    //     style: {
-    //       textDecorationLine: ""
-    //     },
-    //     backgroundColor: null
-    //   });
-    // } else {
-    this.setState(prevState => ({
-      style: {
-        ...prevState.style,
-        ...style
-      }
-      // backgroundColor: "blue"
-    }));
-    // }
-
-    console.log(this.state.style);
+  changeStyle = (style, stylesOfStyle) => {
+    console.log("IF", this.state.style[style]);
+    if (this.state.style[style]) {
+      const newStyle = this.state.style;
+      newStyle[style] = null;
+      this.setState({ style: newStyle });
+      console.log("IFAFTER", this.state.style[style]);
+    } else {
+      console.log("ELSE", this.state.style[style]);
+      this.setState(prevState => ({
+        style: {
+          ...prevState.style,
+          [style]: stylesOfStyle
+        }
+      }));
+      console.log("ELSEAFTER", this.state.style[style]);
+    }
   };
 
   render() {
@@ -70,11 +53,9 @@ class App extends Component {
     const stylingBoxes = styleNames.map(style => {
       return (
         <button
-          onClick={() => this.changeStyle(styles[style])}
-          style={{
-            backgroundColor: this.state.backgroundColor,
-            ...styles[style]
-          }}
+          className={`btn btn- ${this.state[style] && "primary"}`}
+          onClick={() => this.changeStyle(style, styles[style])}
+          style={styles[style]}
           key={style}
         >
           {style}
@@ -96,8 +77,14 @@ class App extends Component {
     return (
       <div className="App">
         <div className="my-3">{stylingBoxes}</div>
-        {/* <textarea style={{ color: this.state.textStyle }} /> */}
-        <textarea style={{ ...this.state.style, color: this.state.color }} />
+        <textarea
+          style={{
+            ...this.state.style.bold,
+            ...this.state.style.italic,
+            ...this.state.style.underline,
+            color: this.state.color
+          }}
+        />
         <div className="my-3">{colorBoxes}</div>
       </div>
     );
